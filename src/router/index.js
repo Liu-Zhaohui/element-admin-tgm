@@ -84,6 +84,19 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/dataany',
+    component: Layout,
+    redirect: '/dataany',
+    children: [
+      {
+        path: 'dataany',
+        component: () => import('@/views/dataany/index'),
+        name: 'dataa',
+        meta: { title: 'json组件', icon: 'dashboard', affix: true }
+      }
+    ]
+  },
+  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
