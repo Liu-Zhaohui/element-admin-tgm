@@ -97,9 +97,22 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/json-viewer',
+    component: Layout,
+    children: [
+      {
+        path: 'dataany',
+        component: () => import('@/views/json-viewer/index'),
+        name: 'JsonViewer',
+        meta: { title: 'json查看', icon: 'dashboard', affix: true }
+      }
+    ]
+  },
+  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
+    hidden: true,
     children: [
       {
         path: 'dashboard',
