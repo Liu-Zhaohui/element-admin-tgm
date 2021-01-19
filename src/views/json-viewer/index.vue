@@ -11,7 +11,7 @@
       <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
       </el-select>
-      <el-button  class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchPv, createArticle, updateArticle } from '@/api/article'
 // import JsonDialog from './components/json-dialog'
 // import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -163,7 +163,7 @@ export default {
       result: [
         {
           id: 1,
-          data:{
+          data: {
             userId: '1111111129ac7325-30da-4e6a-8a00-9699820fc04a',
             realName: '小雪18',
             gradeCode: '166',
@@ -175,12 +175,12 @@ export default {
             schoolId: 21,
             schoolLevel: 1,
             schoolName: '北京第二实验小学朝阳学校'
-          },
+          }
 
         },
-        { 
+        {
           id: 2,
-          data:{
+          data: {
             userId: '1111111129ac7325-30da-4e6a-8a00-9699820fc04b',
             realName: '小雪19',
             gradeCode: '166',
@@ -254,9 +254,9 @@ export default {
   },
   methods: {
     getList() {
-      this.list = [{id:1, timestamp: '1408908663039', title: '常用json1', type: '类别标签1'},
-      {id:2, timestamp: '1408908663039', title: '常用json2', type: '类别标签2'},
-      {id:3, timestamp: '1408908663039', title: '常用json3', type: '类别标签3'}]
+      this.list = [{ id: 1, timestamp: '1408908663039', title: '常用json1', type: '类别标签1' },
+        { id: 2, timestamp: '1408908663039', title: '常用json2', type: '类别标签2' },
+        { id: 3, timestamp: '1408908663039', title: '常用json3', type: '类别标签3' }]
       this.listLoading = false
       // fetchList(this.listQuery).then(response => {
       //   this.list = response.data.items
