@@ -12,14 +12,14 @@
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
       </el-select>
       <el-button  class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        Search
+        搜索
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        Add
+        添加
       </el-button>
-      <el-button  :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+      <!-- <el-button  :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
         Export
-      </el-button>
+      </el-button> -->
       <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
         reviewer
       </el-checkbox>
@@ -40,18 +40,18 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Date" width="150px" align="center">
+      <el-table-column label="时间" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Title" min-width="150px">
+      <el-table-column label="描述" min-width="150px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-          <el-tag>{{ row.type | typeFilter }}</el-tag>
+          <el-tag>{{ row.type }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             查看
@@ -160,6 +160,40 @@ export default {
   },
   data() {
     return {
+      result: [
+        {
+          id: 1,
+          data:{
+            userId: '1111111129ac7325-30da-4e6a-8a00-9699820fc04a',
+            realName: '小雪18',
+            gradeCode: '166',
+            provinceCode: '110000',
+            cityCode: {
+              test1: 'test1',
+              test2: 'test2'
+            },
+            schoolId: 21,
+            schoolLevel: 1,
+            schoolName: '北京第二实验小学朝阳学校'
+          },
+
+        },
+        { 
+          id: 2,
+          data:{
+            userId: '1111111129ac7325-30da-4e6a-8a00-9699820fc04b',
+            realName: '小雪19',
+            gradeCode: '166',
+            provinceCode: '110000',
+            cityCode: {
+              test1: 'test1',
+              test2: 'test2'
+            },
+            schoolId: 21,
+            schoolLevel: 1,
+            schoolName: '北京第二实验小学朝阳学校'
+          }
+        }],
       resultInfo: {
         userId: '1111111129ac7325-30da-4e6a-8a00-9699820fc04a',
         realName: '小雪18',
@@ -220,16 +254,21 @@ export default {
   },
   methods: {
     getList() {
-      this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
+      this.list = [{id:1, timestamp: '1408908663039', title: '常用json1', type: '类别标签1'},
+      {id:2, timestamp: '1408908663039', title: '常用json2', type: '类别标签2'},
+      {id:3, timestamp: '1408908663039', title: '常用json3', type: '类别标签3'}]
+      this.listLoading = false
+      // fetchList(this.listQuery).then(response => {
+      //   this.list = response.data.items
+      //   this.total = response.data.total
+      //   console.log('list')
+      //   console.log(this.list)
 
-        // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
-      })
+      //   // Just to simulate the time of the request
+      //   setTimeout(() => {
+      //     this.listLoading = false
+      //   }, 1.5 * 1000)
+      // })
     },
     handleFilter() {
       this.listQuery.page = 1
