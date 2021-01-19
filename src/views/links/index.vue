@@ -6,13 +6,17 @@
           <div class="title">
             <span class="name">ES</span>
             <span class="command">
-              <el-link
+              <!-- <el-link
                 type="primary"
                 href="https://wiki.amh-group.com/pages/viewpage.action?pageId=65916477"
                 target="_blank"
                 :underline="false"
               >使用查询<i class="el-icon-view el-icon--right" />
-              </el-link>
+              </el-link> -->
+              <router-link :to="'/command/command/view'">
+                <div class="link-font">使用查询<i class="el-icon-view el-icon--right" />
+                </div>
+              </router-link>
             </span>
           </div>
           <div class="link-button">
@@ -25,7 +29,7 @@
               @click="driver_es_dev"
             >DEV</el-button>
             <el-button
-              type="danger"
+              type="warning"
               plain
               placement="bottom"
               @click="driver_es_qa"
@@ -44,7 +48,7 @@
               @click="driver_es_dev"
             >DEV</el-button>
             <el-button
-              type="danger"
+              type="warning"
               plain
               placement="bottom"
               @click="driver_es_qa"
@@ -74,7 +78,7 @@
               @click="newton_dev"
             >DEV</el-button>
             <el-button
-              type="danger"
+              type="warning"
               plain
               placement="bottom"
               @click="newton_qa"
@@ -104,7 +108,7 @@
               @click="owl_dev"
             >DEV</el-button>
             <el-button
-              type="danger"
+              type="warning"
               plain
               placement="bottom"
               @click="owl_qa"
@@ -127,7 +131,7 @@
               @click="gateway_dev"
             >DEV</el-button>
             <el-button
-              type="danger"
+              type="warning"
               plain
               placement="bottom"
               @click="gateway_qa"
@@ -150,7 +154,7 @@
               @click="mq_dev"
             >DEV</el-button>
             <el-button
-              type="danger"
+              type="warning"
               plain
               placement="bottom"
               @click="mq_qa"
@@ -173,7 +177,7 @@
               @click="job_dev"
             >DEV</el-button>
             <el-button
-              type="danger"
+              type="warning"
               plain
               placement="bottom"
               @click="job_qa"
@@ -209,7 +213,7 @@
               @click="hubble_dev"
             >DEV</el-button>
             <el-button
-              type="danger"
+              type="warning"
               plain
               placement="bottom"
               @click="hubble_qa"
@@ -232,7 +236,7 @@
               @click="lion_dev"
             >DEV</el-button>
             <el-button
-              type="danger"
+              type="warning"
               plain
               placement="bottom"
               @click="lion_qa"
@@ -356,6 +360,10 @@ export default {
     .command {
       float: right;
       margin-right: 0px;
+      .link-font {
+        color: #1890ff;
+        font-size: 14px;
+      }
     }
   }
 

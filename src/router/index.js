@@ -97,11 +97,14 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/json-viewer',
+    path: '/command',
+    // component: () => import('@/views/json-viewer/index'),
+    // name: 'JsonViewer',
+    // meta: { title: 'json查看', icon: 'dashboard', affix: true }
     component: Layout,
     children: [
       {
-        path: 'dataany',
+        path: 'command/view',
         component: () => import('@/views/json-viewer/index'),
         name: 'JsonViewer',
         meta: { title: 'json查看', icon: 'dashboard', affix: true }
