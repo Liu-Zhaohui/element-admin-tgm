@@ -260,7 +260,8 @@ export default {
       //   { id: 3, timestamp: '1408908663039', title: '常用json3', type: '类别标签3' }]
       this.listLoading = false
       esList(this.listQuery).then(response => {
-        this.list = response.data.items
+        this.list = response
+        console.log(this.list)
       })
       // fetchList(this.listQuery).then(response => {
       //   this.list = response.data.items
@@ -274,6 +275,8 @@ export default {
       //   }, 1.5 * 1000)
       // })
     },
+    onJsonChange() { console.log('123') },
+    onJsonSave() { console.log('123') },
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
