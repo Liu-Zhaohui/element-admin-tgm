@@ -121,6 +121,7 @@
 
 <script>
 import { fetchPv, createArticle, updateArticle } from '@/api/article'
+import { esList } from '@/api/es'
 // import JsonDialog from './components/json-dialog'
 // import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -212,8 +213,8 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: {
-        page: 1,
-        limit: 20,
+        page: undefined,
+        limit: undefined,
         importance: undefined,
         title: undefined,
         type: undefined,
@@ -254,10 +255,13 @@ export default {
   },
   methods: {
     getList() {
-      this.list = [{ id: 1, timestamp: '1408908663039', title: '常用json1', type: '类别标签1' },
-        { id: 2, timestamp: '1408908663039', title: '常用json2', type: '类别标签2' },
-        { id: 3, timestamp: '1408908663039', title: '常用json3', type: '类别标签3' }]
+      // this.list = [{ id: 1, timestamp: '1408908663039', title: '常用json1', type: '类别标签1' },
+      //   { id: 2, timestamp: '1408908663039', title: '常用json2', type: '类别标签2' },
+      //   { id: 3, timestamp: '1408908663039', title: '常用json3', type: '类别标签3' }]
       this.listLoading = false
+      esList(this.listQuery).then(response => {
+        this.list = response.data.items
+      })
       // fetchList(this.listQuery).then(response => {
       //   this.list = response.data.items
       //   this.total = response.data.total
