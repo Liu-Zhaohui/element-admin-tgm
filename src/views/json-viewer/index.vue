@@ -122,6 +122,7 @@
 <script>
 import { fetchPv, createArticle, updateArticle } from '@/api/article'
 import { esList } from '@/api/es'
+import { desId } from '@/api/es'
 // import JsonDialog from './components/json-dialog'
 // import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -219,6 +220,9 @@ export default {
         title: undefined,
         type: undefined,
         sort: '+id'
+      },
+      listIdQuery: {
+        id: 7
       },
       importanceOptions: [1, 2, 3],
       calendarTypeOptions,
@@ -340,9 +344,17 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
+      //   esList(this.listQuery).then(response => {
+      //   this.list = response
+      //   console.log(this.list)
+      // }
+      desId(this.listIdQuery).then(response => {
+        console.log(response)
+      })
+
+      // this.temp = Object.assign({}, row) // copy obj
+      // this.temp.timestamp = new Date(this.temp.timestamp)
+      // this.dialogStatus = 'update'
       this.dialogFormVisible = true
       console.log(this.dialogFormVisible)
       // this.$nextTick(() => {

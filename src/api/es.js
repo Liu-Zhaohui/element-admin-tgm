@@ -14,3 +14,11 @@ export function esEdit(data) {
     data
   })
 }
+
+export function desId(data) {
+  return request({
+    url: 'http://127.0.0.1:5000/dev-api/v1/es_des/id',
+    method: 'post',
+    data
+  })
+}
