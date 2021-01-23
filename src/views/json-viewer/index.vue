@@ -40,21 +40,29 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="时间" width="150px" align="center">
+      <el-table-column label="功能描述" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="tag" align="center" width="230" class-name="small-padding fixed-width">
+        <template slot-scope="{row}">
+          <el-tag style="margin-left:50px">{{ row.type }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="更新时间" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="描述" min-width="150px">
-        <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-          <el-tag>{{ row.type }}</el-tag>
-        </template>
-      </el-table-column>
+
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             查看
+          </el-button>
+          <el-button type="primary" size="mini" @click="handleEdit(row)">
+            编辑
           </el-button>
         </template>
       </el-table-column>
@@ -116,13 +124,33 @@
         <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisibleedit">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="描述" prop="title">
+          <el-input v-model="temp.title" />
+        </el-form-item>
+        <el-form-item label="更新内容">
+          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 20}" type="textarea" placeholder="Please input" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisibleedit = false">
+          Cancel
+        </el-button>
+        <el-button type="primary" @click="dialogStatus==='create'?createData():editData()">
+          Confirm
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchPv, createArticle, updateArticle } from '@/api/article'
+// import { fetchPv, createArticle, updateArticle } from '@/api/article'
 import { esList } from '@/api/es'
 import { desId } from '@/api/es'
+import { edit } from '@/api/es'
 // import JsonDialog from './components/json-dialog'
 // import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -196,19 +224,7 @@ export default {
             schoolName: '北京第二实验小学朝阳学校'
           }
         }],
-      resultInfo: {
-        userId: '1111111129ac7325-30da-4e6a-8a00-9699820fc04a',
-        realName: '小雪18',
-        gradeCode: '166',
-        provinceCode: '110000',
-        cityCode: {
-          test1: 'test1',
-          test2: 'test2'
-        },
-        schoolId: 21,
-        schoolLevel: 1,
-        schoolName: '北京第二实验小学朝阳学校'
-      },
+      resultInfo: undefined,
       tableKey: 0,
       list: null,
       total: 0,
@@ -221,9 +237,9 @@ export default {
         type: undefined,
         sort: '+id'
       },
-      listIdQuery: {
-        id: 7
-      },
+      listIdQuery: undefined,
+      editrow: undefined,
+      editIdQuery: undefined,
       importanceOptions: [1, 2, 3],
       calendarTypeOptions,
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
@@ -239,6 +255,7 @@ export default {
         status: 'published'
       },
       dialogFormVisible: false,
+      dialogFormVisibleedit: false,
       dialogStatus: '',
       textMap: {
         update: 'Edit',
@@ -258,10 +275,15 @@ export default {
     this.getList()
   },
   methods: {
+    handleCreate() {
+      this.resetTemp()
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
     getList() {
-      // this.list = [{ id: 1, timestamp: '1408908663039', title: '常用json1', type: '类别标签1' },
-      //   { id: 2, timestamp: '1408908663039', title: '常用json2', type: '类别标签2' },
-      //   { id: 3, timestamp: '1408908663039', title: '常用json3', type: '类别标签3' }]
       this.listLoading = false
       esList(this.listQuery).then(response => {
         this.list = response
@@ -317,65 +339,74 @@ export default {
         type: ''
       }
     },
-    handleCreate() {
+    handleEdit(editrow) {
+      this.editrow = editrow
+      console.log(this.editrow.id)
       this.resetTemp()
       this.dialogStatus = 'create'
-      this.dialogFormVisible = true
+      this.dialogFormVisibleedit = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
     },
     createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: 'Created Successfully',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
+      // id = this.editrow.id
+      // console.log(this.editrow.id)
+      console.log('createdata')
+      console.log(this.temp)
+      this.editIdQuery = {
+        'id': this.editrow.id,
+        'title': this.temp.title,
+        'content': this.temp.remark
+      }
+
+      edit(this.editIdQuery).then(response => {
+        console.log(response)
+        this.editresult = response
+        console.log(this.editresult)
+        this.$notify({
+          title: 'Success',
+          message: 'Update Successfully',
+          type: 'success',
+          duration: 2000 })
+        this.dialogFormVisibleedit = false
+        // 强刷当前页面
+        location.reload()
       })
     },
     handleUpdate(row) {
-      //   esList(this.listQuery).then(response => {
-      //   this.list = response
-      //   console.log(this.list)
-      // }
+      this.listIdQuery = {
+        'id': row.id
+      }
+      console.log(this.listIdQuery)
+
       desId(this.listIdQuery).then(response => {
         console.log(response)
+        this.resultInfo = response
+        console.log(this.resultInfo)
+        this.dialogFormVisible = true
       })
 
-      // this.temp = Object.assign({}, row) // copy obj
-      // this.temp.timestamp = new Date(this.temp.timestamp)
-      // this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      console.log(this.dialogFormVisible)
-      // this.$nextTick(() => {
-      //   this.$refs['dataForm'].clearValidate()
-      // })
+      // console.log(this.dialogFormVisible)
     },
-    updateData() {
+    editData() {
+      console.log('this')
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          console.log('zheli')
           const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
-            const index = this.list.findIndex(v => v.id === this.temp.id)
-            this.list.splice(index, 1, this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: 'Update Successfully',
-              type: 'success',
-              duration: 2000
-            })
+          console.log(tempData)
+          // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          // updateArticle(tempData).then(() => {
+          //   const index = this.list.findIndex(v => v.id === this.temp.id)
+          //   this.list.splice(index, 1, this.temp)
+          //   this.dialogFormVisible = false
+          this.$notify({
+            title: 'Success',
+            message: 'Update Successfully',
+            type: 'success',
+            duration: 2000
+            // })
           })
         }
       })
@@ -388,12 +419,6 @@ export default {
         duration: 2000
       })
       this.list.splice(index, 1)
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
     },
     handleDownload() {
       this.downloadLoading = true
