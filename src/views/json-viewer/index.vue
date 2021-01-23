@@ -14,7 +14,7 @@
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleadd">
         添加
       </el-button>
       <!-- <el-button  :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
@@ -126,12 +126,12 @@
     </el-dialog>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisibleedit">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="描述" prop="title">
-          <el-input v-model="temp.title" />
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px" style="width: 700px; margin-left:50px;">
+        <el-form-item label="更新描述" prop="title">
+          <el-input v-model="temp.title" 请输入要更新的描述... />
         </el-form-item>
         <el-form-item label="更新内容">
-          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 20}" type="textarea" placeholder="Please input" />
+          <el-input v-model="temp.remark" :autosize="{ minRows: 6, maxRows: 200}" type="textarea" placeholder="请输入要更新的内容..." />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -139,6 +139,25 @@
           Cancel
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():editData()">
+          Confirm
+        </el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisibleadd">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px" style="width: 700px; margin-left:50px;">
+        <el-form-item label="添加描述" prop="addtitle">
+          <el-input v-model="temp.title" placeholder="请添加描述..." />
+        </el-form-item>
+        <el-form-item label="添加内容">
+          <el-input v-model="temp.addremark" :autosize="{ minRows: 6, maxRows: 200}" type="textarea" placeholder="请添加内容..." />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisibleadd = false">
+          Cancel
+        </el-button>
+        <el-button type="primary" @click="dialogStatus==='create'?createaddData():editData()">
           Confirm
         </el-button>
       </div>
@@ -256,6 +275,7 @@ export default {
       },
       dialogFormVisible: false,
       dialogFormVisibleedit: false,
+      dialogFormVisibleadd: false,
       dialogStatus: '',
       textMap: {
         update: 'Edit',
@@ -275,10 +295,10 @@ export default {
     this.getList()
   },
   methods: {
-    handleCreate() {
+    handleadd() {
       this.resetTemp()
       this.dialogStatus = 'create'
-      this.dialogFormVisible = true
+      this.dialogFormVisibleadd = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
