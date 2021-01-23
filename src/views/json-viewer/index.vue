@@ -125,10 +125,10 @@
       </span>
     </el-dialog>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisibleedit">
+    <el-dialog :title="this.editStatus" :visible.sync="dialogFormVisibleedit">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px" style="width: 700px; margin-left:50px;">
         <el-form-item label="更新描述" prop="title">
-          <el-input v-model="temp.title" 请输入要更新的描述... />
+          <el-input v-model="temp.title" placeholder="请输入要更新的描述..." />
         </el-form-item>
         <el-form-item label="更新内容">
           <el-input v-model="temp.remark" :autosize="{ minRows: 6, maxRows: 200}" type="textarea" placeholder="请输入要更新的内容..." />
@@ -144,7 +144,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisibleadd">
+    <el-dialog :title="this.addStatus" :visible.sync="dialogFormVisibleadd">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px" style="width: 700px; margin-left:50px;">
         <el-form-item label="添加描述" prop="addtitle">
           <el-input v-model="temp.title" placeholder="请添加描述..." />
@@ -277,6 +277,8 @@ export default {
       dialogFormVisibleedit: false,
       dialogFormVisibleadd: false,
       dialogStatus: '',
+      editStatus: 'Edit',
+      addStatus: 'Add',
       textMap: {
         update: 'Edit',
         create: 'Create'
